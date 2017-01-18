@@ -39,6 +39,11 @@ Data %>%
     group_by(crop.c) %>%
       summarise(count = n())
 
+Data %>%
+  slice(cv.k.f[[10]]) %>%
+    group_by(crop.c) %>%
+      summarise(count = n())
+
 # at least all crop classes have > 1000 observations in the training set
 
 # do test run of glmnet with alpha = 1 and set lambda sequence length to get the glmnet recommended lambda sequence
@@ -49,7 +54,8 @@ summary(m.test$lambda) # min = 3.399e-05, max = 2.775e-01
 
 # set up for using `caret` to tune to glmnet model using the cross validation folds create above
 
-trCtrl <- trainControl(index = cv.k.f)
+trCtrl <- trainControl(method = 'cv',
+                       index = cv.k.f)
 
 # create the grid of tunnign parameters to trial:
 
@@ -68,13 +74,19 @@ system.time(
                   tuneGrid = tunning.grid)
 )
 
-save.image(file = '~/MNLR_GCC/Data/Fit.RData')
+# save.image(file = '~/MNLR_GCC/Data/Fit_10FCV.RData')
+
+load('~/MNLR_GCC/Data/Fit_10FCV.RData')
+
+summary(train.obj$finalModel)
 
 class(train.obj$finalModel)
 
 # use the tunned model to predict the full response vector:
 
-y.hat <- predict.glmnet(object = train.obj$finalModel, newx = as.matrix(select(.data = Data, -crop.c)))
+y.hat <- predict.train(object = train.obj, newdata = as.matrix(select(.data = Data, -crop.c)))
+
+summary(y.hat)
 
 # calculate overall predictive accuracy:
 
@@ -84,7 +96,7 @@ summary(y.hat == Data$crop.c)
 
 # % of correct predictions
 
-100*length(y.hat[y.hat == Data$crop.c])/length(Data$crop.c) # 
+100*length(y.hat[y.hat == Data$crop.c])/length(Data$crop.c) # 75.7% of pixels correctly classified
 
 # distribution of correct predictions:
 
@@ -93,9 +105,17 @@ round(100*summary(factor(y.hat[y.hat == Data$crop.c])) / summary(factor(Data$cro
 
 Pred.Objs <- data.frame(Prediction = y.hat, Observation = Data$crop.c)
 
-sum(Pred.Objs$Observation == Pred.Objs$Prediction)/nrow(Pred.Objs)
+class(Pred.Objs$Prediction)
 
-# overall % of pixels predicted correctly:
+class(Pred.Objs$Observation)
+
+length(levels(Pred.Objs$Prediction)) == length(levels(Pred.Objs$Observation))
+
+summary(levels(Pred.Objs$Prediction) %in% levels(Pred.Objs$Observation))
+
+# overall % of pixels predicted correctly classified:
+
+100*sum(Pred.Objs$Observation == Pred.Objs$Prediction)/nrow(Pred.Objs)
 
 Pred.Objs %>%
   mutate(Correct = (Prediction == Observation)) %>%
