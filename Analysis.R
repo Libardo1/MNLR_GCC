@@ -1,4 +1,3 @@
-
 # load the data prepared in Data_Preparation.R:
 
 load('~/MNLR_GCC/Data/Filtered_Data.RData')
@@ -24,12 +23,12 @@ library(doMC)
 registerDoMC(cores = 6)
 
 # create cross validation folds that have proportions of the different crops as balanced as possible
-# (recall our rarest crop classes now have > 1e3 observations)
+# (recall the rarest crop classes we have included have > 1e3 observations each)
 
 # set the number of cross validation folds
-n.folds <- 5
+n.folds <- 10
 
-cv.k.f <- createFolds(y = Data$crop.c, k = 10, returnTrain = TRUE)
+cv.k.f <- createFolds(y = Data$crop.c, k = n.folds, returnTrain = TRUE)
 
 class(cv.k.f)
 
@@ -46,16 +45,20 @@ Data %>%
 
 system.time(m.test <- glmnet(x = as.matrix(select(.data = Data, -crop.c)), y = Data$crop.c, family = 'multinomial', alpha = 1, nlambda = 1e3)) # 15 mins
 
-summary(m.test)
-
 summary(m.test$lambda) # min = 3.399e-05, max = 2.775e-01 
 
+# set up for using `caret` to tune to glmnet model using the cross validation folds create above
+
 trCtrl <- trainControl(index = cv.k.f)
+
+# create the grid of tunnign parameters to trial:
 
 seq.leng <- 10
 
 tunning.grid <- expand.grid(alpha = seq(from = 0, to = 1, length.out = seq.leng),
                             lambda = seq(from = min(m.test$lambda), to = max(m.test$lambda), length.out = seq.leng))
+
+# conduct the cross validation with `caret`
 
 system.time(
   train.obj <- train(x = as.matrix(select(.data = Data, -crop.c)),
@@ -69,17 +72,22 @@ save.image(file = '~/MNLR_GCC/Data/Fit.RData')
 
 class(train.obj$finalModel)
 
-# Overall predictive accuracy:
+# use the tunned model to predict the full response vector:
 
 y.hat <- predict.glmnet(object = train.obj$finalModel, newx = as.matrix(select(.data = Data, -crop.c)))
 
+# calculate overall predictive accuracy:
+
 # number of correct predictions
+
 summary(y.hat == Data$crop.c)
 
-# % of correct predictions                   
-100*length(y.hat[y.hat == Data$crop.c])/length(Data$crop.c) # ?? previously 78.16 % of predictions are correct
+# % of correct predictions
 
-# distribution of correct predictions:                   
+100*length(y.hat[y.hat == Data$crop.c])/length(Data$crop.c) # 
+
+# distribution of correct predictions:
+
 round(100*summary(factor(y.hat[y.hat == Data$crop.c])) / summary(factor(Data$crop.c)), digits = 1)
 
 
@@ -88,11 +96,13 @@ Pred.Objs <- data.frame(Prediction = y.hat, Observation = Data$crop.c)
 sum(Pred.Objs$Observation == Pred.Objs$Prediction)/nrow(Pred.Objs)
 
 # overall % of pixels predicted correctly:
+
 Pred.Objs %>%
   mutate(Correct = (Prediction == Observation)) %>%
     summarise(100*sum(Correct)/n())
 
 # % of pixels in each crop category predicted correctly:
+
 Pred.Objs %>%
   mutate(Correct = (Prediction == Observation)) %>%
     group_by(Observation) %>%
@@ -108,10 +118,4 @@ postResample(pred = y.hat, obs = Data$crop.c)
 
 # previously:
 
-# % correct predictions
-#  Bare_soil & Cotton & Maize & Pasture_natural & Peanut & Sorghum & Wheat \\
-#       91.0 &   92.2 &  14.2 &            77.6 &   82.9 &    80.3 &  10.3 \\
-
-# Wheat and Maize are the two categories with the least observation
-
-# the next step would be to examine the performance on some data held out from the cross validation scheme entirely
+# the next step would be to examine the performance on some data held out from the cross validation scheme entirely...
