@@ -10,7 +10,7 @@ Tuning parameter estimated: alpha = 1 and lambda = 3.39855e-05.
 
 Within class classification accuracy:
 
-|Ground.Cover    | N.Pixels| Pct.Pixels| Pct.Correct|
+|Ground.Cover    | Pixels in Category| % of Total Pixels in Category | % Correctly Classified|
 |:---------------|--------:|----------:|-----------:|
 |Cotton          |    72450|      29.60|       92.82|
 |Sorghum         |    66751|      27.27|       86.24|
