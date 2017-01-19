@@ -4,7 +4,7 @@
 
 Model tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. 
 
-Estimated Tuning Parameter: 
+Tuning Parameter Estimates: 
  * alpha = 1
  * lambda = 3.39855e-05
 
