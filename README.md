@@ -4,13 +4,14 @@
 
 Model tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. 
 
-Tuning parameter estimated: alpha = 1 and lambda = 3.39855e-05.
+Tuning parameter estimated: 
+\alpha = 1 and \lambda = 3.39855e-05.
 
 75.74% of Pixels classified correctly by this model.
 
 Within class classification accuracy:
 
-|Ground.Cover    | Pixels in Category| % of Total Pixels in Category | % Correctly Classified|
+|Ground Cover Category | Pixels in Category| % of Total Pixels | % of Pixels in Category Correctly Classified|
 |:---------------|--------:|----------:|-----------:|
 |Cotton          |    72450|      29.60|       92.82|
 |Sorghum         |    66751|      27.27|       86.24|
