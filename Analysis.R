@@ -194,9 +194,13 @@ library(tidyr)
 
 Coef.df.G <- gather(data = Coef.df, -Term, key = 'ID', value = 'coefficient')
 
-p <- ggplot(aes(x = Term, y = coefficient), data = Coef.df.G)
+coef.p <- ggplot(aes(x = Term, y = coefficient), data = Coef.df.G) + theme_bw()
 
-p + geom_point() + facet_wrap(facets = 'ID') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+coef.p <- coef.p+ geom_point() + facet_wrap(facets = 'ID', nrow = 4) + theme_update(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+coef.p
+
+ggsave(filename = '~/Pictures/Crop_EN_MN_Coef_Ests_10FCV.png', plot = coef.p, units = 'in', width = 6, height = 10, dpi = 300)
 
 
 # the next step would be to examine the performance on some data held out from the cross validation scheme entirely...
