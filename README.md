@@ -5,7 +5,7 @@
 Model tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. 
 
 Tuning Parameter Estimates: 
- * alpha = 1
+ * alpha = 1 (i.e. a LASSO solution is selected)
  * lambda = 3.39855e-05
 
 75.74% of pixels classified correctly by this model.
