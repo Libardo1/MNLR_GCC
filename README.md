@@ -1,6 +1,10 @@
 ## Multinomial Logistic Regression for Ground Cover Classification
 
-### Predictions from Elastic Net Regularized Multinomial Logistic Regression tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. Tuning parameter estimated: alpha = 1 and lambda = 3.39855e-05.
+### Predictions from Elastic Net Regularized Multinomial Logistic Regression
+
+Model tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. 
+
+Tuning parameter estimated: alpha = 1 and lambda = 3.39855e-05.
 
 75.74% of Pixels classified correctly by this model.
 
@@ -22,7 +26,9 @@ Within class classification accuracy:
 |Leucaena        |     1145|       0.47|        0.00|
 
 
-Figure: 
-<img src="http://i.imgur.com/qGWcPdO.png" alt="Image" width="800" height="1200" border="2" /></a>
+Coefficient Figure: 
+
+
+<img src="http://i.imgur.com/vUmWlHg.png" alt="Image" width="1800" height="3000" border="2" /></a>
 
 
