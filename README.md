@@ -25,5 +25,5 @@ Within class classification accuracy:
 Figure: 
 ![alt text][figure]
 
-[figure]: https://drive.google.com/open?id=0B6LNItlcfZCVckJtU2NnRlFvUG8 "figure"
+[figure]: http://imgur.com/a/gJRUE "figure"
 
