@@ -4,10 +4,11 @@
 
 Model tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. 
 
-Tuning parameter estimated: 
-alpha = 1 and lambda = 3.39855e-05.
+Estimated Tuning Parameter: 
+ * alpha = 1
+ * lambda = 3.39855e-05
 
-75.74% of Pixels classified correctly by this model.
+75.74% of pixels classified correctly by this model.
 
 Within class classification accuracy:
 
