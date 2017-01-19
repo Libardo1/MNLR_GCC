@@ -23,7 +23,5 @@ Within class classification accuracy:
 
 
 Figure: 
-![alt text][figure]
-
-[figure]: http://imgur.com/a/gJRUE "figure"
+[[http://imgur.com/a/gJRUE|alt=figure]]
 
