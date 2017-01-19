@@ -29,6 +29,6 @@ Within class classification accuracy:
 Coefficient Figure: 
 
 
-<img src="http://i.imgur.com/vUmWlHg.png" alt="Image" width="1800" height="3000" border="2" /></a>
+<img src="http://i.imgur.com/vUmWlHg.png" alt="Image" width="600" height="1000" border="2" /></a>
 
 
