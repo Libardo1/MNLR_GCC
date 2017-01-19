@@ -4,7 +4,7 @@
 
 75.74% of Pixels classified correctly by this model.
 
-Withing class classification accuracy:
+Within class classification accuracy:
 
 |Ground.Cover    | N.Pixels| Pct.Pixels| Pct.Correct|
 |:---------------|--------:|----------:|-----------:|
@@ -20,3 +20,6 @@ Withing class classification accuracy:
 |Oat             |     1513|       0.62|        0.00|
 |Mungbean        |     1225|       0.50|       18.20|
 |Leucaena        |     1145|       0.47|        0.00|
+
+
+[[https://drive.google.com/open?id=0B6LNItlcfZCVckJtU2NnRlFvUG8]]
