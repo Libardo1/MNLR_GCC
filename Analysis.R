@@ -72,15 +72,15 @@ system.time(
                   trControl = trCtrl,
                   method = 'glmnet',
                   tuneGrid = tunning.grid)
-)
+) # 3 hrs 43 mins
 
 # save.image(file = '~/MNLR_GCC/Data/Fit_10FCV.RData')
 
 load('~/MNLR_GCC/Data/Fit_10FCV.RData')
 
-summary(train.obj$finalModel)
+train.obj
 
-class(train.obj$finalModel)
+# 'The final values used for the model were alpha = 1 and lambda = 3.39855e-05. '
 
 # use the tunned model to predict the full response vector:
 
@@ -99,9 +99,6 @@ summary(y.hat == Data$crop.c)
 100*length(y.hat[y.hat == Data$crop.c])/length(Data$crop.c) # 75.7% of pixels correctly classified
 
 # distribution of correct predictions:
-
-round(100*summary(factor(y.hat[y.hat == Data$crop.c])) / summary(factor(Data$crop.c)), digits = 1)
-
 
 Pred.Objs <- data.frame(Prediction = y.hat, Observation = Data$crop.c)
 
@@ -126,16 +123,40 @@ Pred.Objs %>%
 Pred.Objs %>%
   mutate(Correct = (Prediction == Observation)) %>%
     group_by(Observation) %>%
-      summarise(Percnt.Correct = 100*sum(Correct)/n())
+      summarise(Percentage.Correctly.Predicted = 100*sum(Correct)/n()) %>%
+        arrange(desc(Percentage.Correctly.Predicted)) -> Pc.Cor.by.Crop
+
+Pc.Cor.by.Crop
+
+colnames(Pc.Cor.by.Crop) <- c('crop.c', 'Percentage.Correctly.Predicted')
+
+# compare to:
+
+Data %>%
+  group_by(crop.c) %>%
+    summarise(n = n()) %>%
+      arrange(desc(n)) -> N.by.Crop
+
+N.by.Crop
+
+left_join(x = N.by.Crop, y = Pc.Cor.by.Crop, by = 'crop.c') %>%
+  mutate( Percentage.of.Observations = 100*n/nrow(Data)) -> Accuracy.by.Category
+
+View(Accuracy.by.Category)
+
+Accuracy.by.Category.Print <- Accuracy.by.Category
+
+colnames(Accuracy.by.Category.Print) <- c('Ground.Cover', 'N.Pixels', 'Pct.Correct', 'Pct.Pixels')
+
+Accuracy.by.Category.Print
+
+library(knitr)
+
+select(.data = Accuracy.by.Category.Print, Ground.Cover, N.Pixels, Pct.Pixels, Pct.Correct) %>%
+  kable(x = ., format = 'markdown', caption = 'Predictions from Elastic Net Regularized Multinomial Logistic Regression tuned by 10 fold cross validation with a 10 by 10 tuning parameter grid. Tuning parameter estimated: alpha = 1 and lambda = 3.39855e-05.', digits = 2)
 
 # but see also
 
-confusionMatrix(data = y.hat, reference = Data$crop.c, mode = 'prec_recall')
-
-# and
-
 postResample(pred = y.hat, obs = Data$crop.c)
-
-# previously:
 
 # the next step would be to examine the performance on some data held out from the cross validation scheme entirely...
