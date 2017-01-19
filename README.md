@@ -22,4 +22,8 @@ Within class classification accuracy:
 |Leucaena        |     1145|       0.47|        0.00|
 
 
-[[https://drive.google.com/open?id=0B6LNItlcfZCVckJtU2NnRlFvUG8]]
+Figure: 
+![alt text][figure]
+
+[figure]: https://drive.google.com/open?id=0B6LNItlcfZCVckJtU2NnRlFvUG8 "figure"
+
