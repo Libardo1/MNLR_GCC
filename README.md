@@ -26,8 +26,8 @@ Within class classification accuracy:
 |Leucaena        |     1145|       0.47|        0.00|
 
 
-Coefficient Figure: 
 
+Estimated Coefficients: 
 
 <img src="http://i.imgur.com/vUmWlHg.png" alt="Image" width="600" height="1000" border="2" /></a>
 
