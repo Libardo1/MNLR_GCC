@@ -159,4 +159,44 @@ select(.data = Accuracy.by.Category.Print, Ground.Cover, N.Pixels, Pct.Pixels, P
 
 postResample(pred = y.hat, obs = Data$crop.c)
 
+
+#
+length(levels(Data$crop.c))
+
+
+png(filename = '~/Pictures/Crop_EN_MN_Coef_10FCV.png', width = 800, height = 1200)
+par(mfcol = c(4,3))
+plot(train.obj$finalModel, label = TRUE, cex.lab = 1.5)
+dev.off()
+# tiny numbers at the end of lines of column numbers of the associated covariate in the design matrix 
+
+train.obj
+
+coef.s <- coef(object = train.obj$finalModel, s = 3.39855e-05)
+
+names(coef.s)
+
+Coef.df <- data.frame(Term = row.names(as.matrix(coef.s[[1]])))
+
+data.frame(as.matrix(coef.s[[1]]))
+
+for(i in 1:length(coef.s)){
+  Out <- data.frame(Term = row.names(as.matrix(coef.s[[i]])), as.matrix(coef.s[[i]]))
+  colnames(Out) <- c('Term', paste(names(coef.s)[i]))
+  Coef.df <- left_join(x = Coef.df, y = Out, by = 'Term')
+}
+
+
+
+kable(x = Coef.df, digits = 2)
+
+library(tidyr)
+
+Coef.df.G <- gather(data = Coef.df, -Term, key = 'ID', value = 'coefficient')
+
+p <- ggplot(aes(x = Term, y = coefficient), data = Coef.df.G)
+
+p + geom_point() + facet_wrap(facets = 'ID') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+
 # the next step would be to examine the performance on some data held out from the cross validation scheme entirely...
